@@ -25,4 +25,14 @@ const createUser = async ({ name, email, password, role }) => {
   return { status: 201, result };
 };
 
-module.exports = { createUser };
+const loginUser = async (email, password) => {
+  const user = await User.findOne({ where: { email } });
+  if (!user) return ({ status: 404, message: 'User not found' });
+  const { password: userPassword } = user;
+  if (md5(password) !== userPassword) return ({ status: 401, message: 'Invalid password' });
+  const token = generateToken({ email: user.email, role: user.role, id: user.id });
+  const result = { id: user.id, name: user.name, email, role: user.role, token };
+  return { status: 201, result };
+};
+
+module.exports = { createUser, loginUser };
