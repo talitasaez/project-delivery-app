@@ -32,7 +32,7 @@ const loginUser = async (email, password) => {
   if (md5(password) !== userPassword) return ({ status: 401, message: 'Invalid password' });
   const token = generateToken({ email: user.email, role: user.role, id: user.id });
   const result = { id: user.id, name: user.name, email, role: user.role, token };
-  return { status: 201, result };
+  return { status: 200, result };
 };
 
 module.exports = { createUser, loginUser };
