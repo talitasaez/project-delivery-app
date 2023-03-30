@@ -1,8 +1,9 @@
-import React, { createContext } from 'react';
+import React, { createContext, useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 
-const AppContext = createContext({ children });
+const AppContext = createContext();
 
-function AppProvider() {
+function AppProvider({ children }) {
   const getUser = localStorage.getItem('user');
   const [userInfo, setUserInfo] = useState(JSON.parse(getUser) || {});
   const [products, setProducts] = useState([]);
@@ -21,14 +22,14 @@ function AppProvider() {
 
   return (
     <AppContext.Provider value={ contextState }>
-      { children }
+      {children}
     </AppContext.Provider>
   );
 }
 
 AppProvider.propTypes = {
-  // children: PropTypes.node.isRequired,
-};
+  children: PropTypes.shape,
+}.isRequired;
 
 export default AppProvider;
 export { AppContext };

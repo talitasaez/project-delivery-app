@@ -1,14 +1,10 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { AppContext } from '../context/contextProducts';
 
 function NavBar() {
   const { userInfo, setUserInfo } = useContext(AppContext);
-  const navigate = useNavigate();
-
-  // const handleLogout = () => {
-  //   setUserInfo({});
-  // };
+  const history = useHistory();
 
   return (
     <header>
@@ -16,7 +12,7 @@ function NavBar() {
         <button
           type="button"
           data-testid="customer_products__element-navbar-link-products"
-          onClick={ () => navigate('/customer/products') }
+          onClick={ () => history.push('/customer/products') }
         >
           PRODUTOS
         </button>
@@ -24,7 +20,7 @@ function NavBar() {
         <button
           type="button"
           data-testid="customer_products__element-navbar-link-orders"
-          onClick={ () => navigate('/customer/orders') }
+          onClick={ () => history.push('/customer/orders') }
         >
           MEUS PEDIDOS
         </button>

@@ -7,7 +7,7 @@ function ProductsCard({ id, name, price, thumbnail }) {
       <span
         data-testid={ `customer_products__element-card-price-${id}` }
       >
-        {`R$ ${price.toFixed(2)}`}
+        {`R$ ${price}`}
       </span>
       <img
         data-testid={ `customer_products__img-card-bg-image-${id}` }
@@ -26,9 +26,7 @@ function ProductsCard({ id, name, price, thumbnail }) {
 ProductsCard.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  price: PropTypes.shape({
-    toFixed: PropTypes.func,
-  }).isRequired,
+  price: PropTypes.isRequired,
   thumbnail: PropTypes.string.isRequired,
 };
 
