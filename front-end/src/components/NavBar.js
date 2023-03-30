@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AppContext } from '../context/contextProducts';
+import { productsContext } from '../context/contextProducts';
 
 function NavBar() {
-  const { userInfo, setUserInfo } = useContext(AppContext);
+  const { userInfo, setUserInfo } = useContext(productsContext);
   const history = useHistory();
 
   return (

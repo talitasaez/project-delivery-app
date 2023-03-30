@@ -2,11 +2,11 @@ import React, { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import ProductsCard from '../components/ProductsCard';
-import { AppContext } from '../context/contextProducts';
+import { productsContext } from '../context/contextProducts';
 import fetchProducts from '../requests/index';
 
 function Products() {
-  const { products, setProducts } = useContext(AppContext);
+  const { products, setProducts } = useContext(productsContext);
   const history = useHistory();
 
   useEffect(() => {

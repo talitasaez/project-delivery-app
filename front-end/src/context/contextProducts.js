@@ -1,9 +1,9 @@
 import React, { createContext, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-const AppContext = createContext();
+const productsContext = createContext();
 
-function AppProvider({ children }) {
+function productsProvider({ children }) {
   const getUser = localStorage.getItem('user');
   const [userInfo, setUserInfo] = useState(JSON.parse(getUser) || {});
   const [products, setProducts] = useState([]);
@@ -21,15 +21,15 @@ function AppProvider({ children }) {
   ]);
 
   return (
-    <AppContext.Provider value={ contextState }>
+    <productsContext.Provider value={ contextState }>
       {children}
-    </AppContext.Provider>
+    </productsContext.Provider>
   );
 }
 
-AppProvider.propTypes = {
+productsProvider.propTypes = {
   children: PropTypes.shape,
 }.isRequired;
 
-export default AppProvider;
-export { AppContext };
+export default productsProvider;
+export { productsContext };

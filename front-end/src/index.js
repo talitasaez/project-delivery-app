@@ -1,17 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import reportWebVitals from './reportWebVitals';
 import AppProvider from './context/contextProducts';
+import FormProvider from './context/FormProvider';
 import './index.css';
 import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
+      <FormProvider>
       <AppProvider>
         <App />
       </AppProvider>
+      </FormProvider>
+      <App />
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root'),
