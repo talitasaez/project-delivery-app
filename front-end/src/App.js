@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import './App.css';
 import FormProvider from './context/FormProvider';
 import Login from './pages/Login';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <FormProvider>
         <Switch>
           <Route exact path="/login" component={ Login } />
+          <Route exact path="/register" component={ Register } />
         </Switch>
       </FormProvider>
     </main>

@@ -45,9 +45,10 @@ function GenericInput({ name, type, validation, keyOfInput, dataTestId }) {
 
 GenericInput.propTypes = {
   name: PropTypes.string,
-  key: PropTypes.string,
   type: PropTypes.string,
   validation: PropTypes.func,
+  keyOfInput: PropTypes.string,
+  dataTestId: PropTypes.string,
 }.isRequired;
 
 export default GenericInput;
