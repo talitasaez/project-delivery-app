@@ -4,6 +4,7 @@ import Products from './pages/Products';
 import './App.css';
 // import FormProvider from './context/FormProvider';
 import Login from './pages/Login';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Redirect to="/login" />
         </Route>
         <Route exact path="/login" component={ Login } />
+        <Route exact path="/register" component={ Register } />
         <Route exact path="/customer/products" component={ Products } />
       </Switch>
     </main>
