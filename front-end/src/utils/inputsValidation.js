@@ -5,6 +5,13 @@ const validateEmailInput = (email, set) => {
     { ...prevState, email: { ...prevState.email, isValid } }));
 };
 
+const validateNameInput = (name, set) => {
+  const DOZE = 12;
+  const isValid = name.length >= DOZE;
+  set((prevState) => (
+    { ...prevState, name: { ...prevState.name, isValid } }));
+};
+
 const validatePasswordInput = (password, set) => {
   const SEIS = 6;
   const isValid = password.length >= SEIS;
@@ -12,4 +19,4 @@ const validatePasswordInput = (password, set) => {
     { ...prevState, password: { ...prevState.password, isValid } }));
 };
 
-export { validateEmailInput, validatePasswordInput };
+export { validateEmailInput, validateNameInput, validatePasswordInput };
