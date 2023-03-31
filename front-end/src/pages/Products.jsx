@@ -2,11 +2,11 @@ import React, { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import ProductsCard from '../components/ProductsCard';
-import { productsContext } from '../context/contextProducts';
+import { ProductsContext } from '../context/ProductsProvider';
 import fetchProducts from '../requests/index';
 
 function Products() {
-  const { products, setProducts } = useContext(productsContext);
+  const { products, setProducts, cart } = useContext(ProductsContext);
   const history = useHistory();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function Products() {
     };
 
     getProducts();
-  }, [setProducts]);
+  }, []);
 
   return (
     <div>
@@ -28,6 +28,12 @@ function Products() {
         onClick={ () => history.push('/customer/checkout') }
       >
         Ver carrinho: R$
+        <span>
+          {
+            cart.reduce((acc, { price, quantity }) => acc + price * quantity, 0)
+              .toFixed(2).replace('.', ',')
+          }
+        </span>
       </button>
       {products.map((product, index) => (
         <ProductsCard
@@ -35,7 +41,7 @@ function Products() {
           id={ product.id }
           index={ index }
           name={ product.name }
-          price={ product.price }
+          price={ Number(product.price) }
           thumbnail={ product.url_image }
         />
       ))}

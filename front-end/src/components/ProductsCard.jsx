@@ -7,9 +7,10 @@ function ProductsCard({ id, name, price, thumbnail }) {
       <span
         data-testid={ `customer_products__element-card-price-${id}` }
       >
-        {`R$ ${price}`}
+        {`R$ ${price.toFixed(2).replace('.', ',')}`}
       </span>
       <img
+        width={ 200 }
         data-testid={ `customer_products__img-card-bg-image-${id}` }
         src={ thumbnail }
         alt="card produto"
@@ -26,7 +27,7 @@ function ProductsCard({ id, name, price, thumbnail }) {
 ProductsCard.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  price: PropTypes.isRequired,
+  price: PropTypes.number.isRequired,
   thumbnail: PropTypes.string.isRequired,
 };
 
