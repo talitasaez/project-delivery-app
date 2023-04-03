@@ -22,8 +22,8 @@ function Register() {
       name: name.value, email: email.value, password: password.value,
     }).then(({ data }) => {
       console.log(data);
-      localStorage.setItem('user', JSON.stringify(data.result));
-      setUser(data.result);
+      localStorage.setItem('user', JSON.stringify(data));
+      setUser(data);
 
       setInputsValue({
         name: { value: '', isValid: false },
