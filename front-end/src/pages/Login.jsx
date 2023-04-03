@@ -24,9 +24,9 @@ function Login() {
       email: email.value, password: password.value,
     }).then(({ data }) => {
       console.log(data);
-      localStorage.setItem('user', JSON.stringify(data.result));
-      setUser(data.result);
-      switch (data.result.role) {
+      localStorage.setItem('user', JSON.stringify(data));
+      setUser(data);
+      switch (data.role) {
       case 'administrator': history.push('/admin/manage'); break;
       case 'seller': history.push('/seller/orders'); break;
       default: history.push('/customer/products'); break;
