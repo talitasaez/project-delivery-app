@@ -1,38 +1,42 @@
 const md5 = require('md5');
 const { User } = require('../database/models');
 const { generateToken } = require('../utils/generate.token');
+const { processError } = require('../utils/handleError');
 
 const createUser = async ({ name, email, password, role }) => {
-  const emailExists = await User.findOne({ where: { email } });
-  const nameExists = await User.findOne({ where: { name } });
+  try {
+    const cryptoPassword = md5(password);
 
-  if (emailExists || nameExists) return ({ status: 409, message: 'User already registered' });
+    let userRole = role;
 
-  const cryptoPassword = md5(password);
+    if (!role) {
+      userRole = 'customer';
+    }
 
-  let type = role;
+    const user = await User.create({ name, email, password: cryptoPassword, role: userRole });
 
-  if (!role) {
-    type = 'customer';
+    const token = generateToken({ email, role: user.role, id: user.id });
+
+    const userCallback = { id: user.id, name, email, role: user.role, token };
+
+    return { message: userCallback };
+  } catch (error) {
+    const { type, message } = processError(error);
+    return { type, message };
   }
-
-  const user = await User.create({ name, email, password: cryptoPassword, role: type });
-
-  const token = generateToken({ email, role: user.role, id: user.id });
-
-  const result = { id: user.id, name, email, role: user.role, token };
-
-  return { status: 201, result };
 };
 
 const loginUser = async (email, password) => {
   const user = await User.findOne({ where: { email } });
-  if (!user) return ({ status: 404, message: 'User not found' });
-  const { password: userPassword } = user;
-  if (md5(password) !== userPassword) return ({ status: 401, message: 'Invalid password' });
-  const token = generateToken({ email: user.email, role: user.role, id: user.id });
-  const result = { id: user.id, name: user.name, email, role: user.role, token };
-  return { status: 200, result };
+  try {
+    const { password: userPassword } = user;
+    if (md5(password) !== userPassword) return ({ type: 401, message: 'Invalid password' });
+    const token = generateToken({ email: user.email, role: user.role, id: user.id });
+    const userCallback = { id: user.id, name: user.name, email, role: user.role, token };
+    return { message: userCallback };
+  } catch (error) {
+    if (!user) return ({ type: 404, message: 'User not found' });
+  }
 };
 
 module.exports = { createUser, loginUser };
