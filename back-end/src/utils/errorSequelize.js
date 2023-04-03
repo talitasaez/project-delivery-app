@@ -5,7 +5,7 @@ const errorSequelize = (error) => {
   const types = {
     'notNull Violation': { type: statusCode.BAD_REQUEST,
       message: `o campo ${path} é necessário, o valor recebido desse campo foi ${value}` },
-    'unique violation': { type: statusCode.CONFLICT, message: 'Email ja está cadastrado' },
+    'unique violation': { type: statusCode.CONFLICT, message: 'Nome ou Email ja está cadastrado' },
   };
   return types[type];
 };
