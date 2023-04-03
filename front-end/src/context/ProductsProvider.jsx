@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { createContext, useMemo, useState } from 'react';
+import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 const ProductsContext = createContext();
 
 function ProductsProvider({ children }) {
   const getUser = localStorage.getItem('user');
-  const getCart = localStorage.getItem('cart');
   const [userInfo, setUserInfo] = useState(JSON.parse(getUser) || {});
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState(JSON.parse(getCart) || []);
+  const [cart, setCart] = useState([]);
+  const [totalValue, setTotalValue] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const contextState = useMemo(() => ({
     userInfo,
@@ -17,6 +18,10 @@ function ProductsProvider({ children }) {
     setProducts,
     cart,
     setCart,
+    totalValue,
+    setTotalValue,
+    totalPrice,
+    setTotalPrice,
   }), [
     userInfo,
     setUserInfo,
@@ -24,7 +29,15 @@ function ProductsProvider({ children }) {
     setProducts,
     cart,
     setCart,
+    totalValue,
+    setTotalValue,
+    totalPrice,
+    setTotalPrice,
   ]);
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   return (
     <ProductsContext.Provider value={ contextState }>

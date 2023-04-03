@@ -6,18 +6,35 @@ import { ProductsContext } from '../context/ProductsProvider';
 import fetchProducts from '../requests/index';
 
 function Products() {
-  const { products, setProducts, cart } = useContext(ProductsContext);
+  const { products,
+    setProducts,
+    cart,
+    // totalPrice,
+    // setTotalPrice,
+    totalValue,
+    setTotalValue } = useContext(ProductsContext);
   const history = useHistory();
+
+  const handlePrice = () => {
+    // console.log('cart', cart);
+    const reduce = cart
+      .reduce((acc, curr) => acc + curr.price * curr.qtd, 0)
+      .toFixed(2);
+    // console.log('reduce', reduce);
+    setTotalValue(reduce);
+    return reduce;
+  };
 
   useEffect(() => {
     const getProducts = async () => {
       const response = await fetchProducts();
       setProducts(response);
-      console.log('response --->', response);
+      // console.log('response --->', response);
     };
 
     getProducts();
-  }, []);
+    handlePrice();
+  }, [totalValue]);
 
   return (
     <div>
@@ -29,10 +46,7 @@ function Products() {
       >
         Ver carrinho: R$
         <span>
-          {
-            cart.reduce((acc, { price, quantity }) => acc + price * quantity, 0)
-              .toFixed(2).replace('.', ',')
-          }
+          { totalValue }
         </span>
       </button>
       {products.map((product, index) => (
@@ -41,7 +55,7 @@ function Products() {
           id={ product.id }
           index={ index }
           name={ product.name }
-          price={ Number(product.price) }
+          price={ product.price }
           thumbnail={ product.url_image }
         />
       ))}
