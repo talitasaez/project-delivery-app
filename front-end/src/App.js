@@ -5,6 +5,7 @@ import './App.css';
 // import FormProvider from './context/FormProvider';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route exact path="/login" component={ Login } />
         <Route exact path="/register" component={ Register } />
         <Route exact path="/customer/products" component={ Products } />
+        <Route exact path="/administrator/" component={ Admin } />
       </Switch>
     </main>
   );
