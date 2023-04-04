@@ -16,12 +16,11 @@ function Products() {
   const history = useHistory();
 
   const handlePrice = () => {
-    // console.log('cart', cart);
     const reduce = cart
       .reduce((acc, curr) => acc + curr.price * curr.qtd, 0)
       .toFixed(2);
-    // console.log('reduce', reduce);
     setTotalValue(reduce);
+    console.log(typeof totalValue);
     return reduce;
   };
 
@@ -29,7 +28,6 @@ function Products() {
     const getProducts = async () => {
       const response = await fetchProducts();
       setProducts(response);
-      // console.log('response --->', response);
     };
 
     getProducts();
@@ -39,16 +37,19 @@ function Products() {
   return (
     <div>
       <NavBar />
-      <button
-        type="button"
-        data-testid="customer_products__button-cart"
-        onClick={ () => history.push('/customer/checkout') }
-      >
-        Ver carrinho: R$
-        <span>
-          { totalValue }
-        </span>
-      </button>
+      <div>
+        <button
+          type="button"
+          data-testid="customer_products__button-cart"
+          disabled={ Number(totalValue) === 0 }
+          onClick={ () => history.push('/customer/checkout') }
+        >
+          Ver carrinho: R$
+          <span data-testid="customer_products__checkout-bottom-value">
+            { totalValue.toString().replace('.', ',') }
+          </span>
+        </button>
+      </div>
       {products.map((product, index) => (
         <ProductsCard
           key={ product.id }
