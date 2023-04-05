@@ -39,4 +39,18 @@ const loginUser = async (email, password) => {
   }
 };
 
-module.exports = { createUser, loginUser };
+const findUsers = async () => {
+  const users = await User.findAll();
+
+  return { message: users };
+};
+
+const deleteUser = async (id) => {
+  const user = await User.destroy({ where: { id } });
+
+  if (!user) return { type: 404, message: 'User not found' };
+
+  return { message: user };
+};
+
+module.exports = { createUser, loginUser, findUsers, deleteUser };

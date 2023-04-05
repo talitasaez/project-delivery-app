@@ -19,4 +19,18 @@ const userService = require('../service/user.service');
     return res.status(200).json(message);
   };
 
-module.exports = { createUser, loginUser };
+  const findUsers = async (_req, res) => {
+    const { message } = await userService.findUsers();
+
+    return res.status(200).json(message);
+  };
+
+  const deleteUser = async (req, res) => {
+    const { type, message } = await userService.deleteUser(req.params.id);
+
+    if (type) return res.status(type).json(message);
+
+    return res.status(204).json(message);
+  };
+
+module.exports = { createUser, loginUser, findUsers, deleteUser };
