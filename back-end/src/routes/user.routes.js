@@ -1,12 +1,14 @@
 const { Router } = require('express');
 
 const userController = require('../controller/user.controller');
+const { tokenAuthorization } = require('../middlewares/admin.JwtAuthentication');
 const { verifyEmail, verifyName, verifyPassword } = require('../middlewares/user.validation');
 
 const route = Router();
 
 route.post(
   '/register',
+  tokenAuthorization,
   verifyEmail,
   verifyName,
   verifyPassword,
