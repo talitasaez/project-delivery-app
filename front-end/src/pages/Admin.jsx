@@ -1,54 +1,50 @@
-import React, { useContext, useEffect } from 'react';
-// import { Redirect } from 'react-router-dom';
-import AdminContext from '../context/AdminProvider';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import GenericInput from '../components/GenericInput';
+import { formContext } from '../context/FormProvider';
+import { validateEmailInput,
+  validateNameInput, validatePasswordInput } from '../utils/inputsValidation';
 
 function Admin() {
-  const { name, password, email, role, setEmail, setPassword, setName, setRole,
-    btnDisable, setBtnDisable } = useContext(AdminContext);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [role, setRole] = useState('seller');
+  const { inputsValue: { name, email, password },
+    setInputsValue, setUser } = useContext(formContext);
+  const { token } = JSON.parse(localStorage.getItem('user'));
 
-  const handleDisable = () => {
-    const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/gi;
-    const nameL = 12;
-    const passL = 6;
-    const nameComplete = name.length >= nameL;
-    const emailOk = regex.test(email);
-    const passwordOk = password.length >= passL;
-    const checkData = !(emailOk && passwordOk && nameComplete);
-    setBtnDisable(checkData);
+  const onSubmit = (event) => {
+    event.preventDefault();
   };
 
-  const handleName = ({ e }) => {
-    setName(e.value);
-    handleDisable();
+  const handleRole = ({ target }) => {
+    setRole(target.value);
   };
 
-  const handleEmail = ({ e }) => {
-    setEmail(e.value);
-    handleDisable();
-  };
+  const postEndPointRegister = async () => {
+    axios.post('http://localhost:3001/user/register', {
+      name: name.value, email: email.value, password: password.value, role,
+    }, { headers: { Authorization: token } }).then(({ data }) => {
+      console.log(data);
+      console.log(token);
+      setUser(data);
 
-  const handlePassword = ({ e }) => {
-    setPassword(e.value);
-    handleDisable();
-  };
-
-  const handleRole = ({ e }) => {
-    setRole(e.value);
-    handleDisable();
+      setInputsValue({
+        name: { value: '', isValid: false },
+        email: { value: '', isValid: false },
+        password: { value: '', isValid: false },
+      });
+      setRole('seller');
+    }).catch(({ response: { data } }) => setErrorMessage(data));
   };
 
   useEffect(() => {
-    handleDisable();
-  });
-
-  // try {
-  //   const { isAdmin } = JSON.parse(localStorage.getItem('user'));
-  //   if (!isLogged || isAdmin !== 'admin') {
-  //     return <Redirect to="/login" />;
-  //   }
-  // } catch (error) {
-  //   return <Redirect to="/login" />;
-  // }
+    setInputsValue({
+      name: { value: '', isValid: false },
+      email: { value: '', isValid: false },
+      password: { value: '', isValid: false },
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
@@ -64,44 +60,30 @@ function Admin() {
         </button>
       </header>
 
-      <h1>Cadastror novo Usuário</h1>
+      <h1>Cadastrar novo Usuário</h1>
 
-      <form>
-        <label htmlFor="name">
-          Nome:
-          <input
-            name="name"
-            type="text"
-            id="name"
-            value={ name }
-            data-testid="admin_manage__input-name"
-            onChange={ handleName }
-          />
-        </label>
-
-        <label htmlFor="email">
-          Email:
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={ email }
-            data-testid="admin_manage__input-email"
-            onChange={ handleEmail }
-          />
-        </label>
-
-        <label htmlFor="password">
-          Senha:
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={ password }
-            data-testid="admin_manage__input-password"
-            onChange={ handlePassword }
-          />
-        </label>
+      <form onSubmit={ onSubmit }>
+        <GenericInput
+          name="Nome"
+          keyOfInput="name"
+          type="text"
+          validation={ validateNameInput }
+          dataTestId="admin_manage__input-name"
+        />
+        <GenericInput
+          name="Email"
+          keyOfInput="email"
+          type="email"
+          validation={ validateEmailInput }
+          dataTestId="admin_manage__input-email"
+        />
+        <GenericInput
+          name="Senha"
+          keyOfInput="password"
+          type="password"
+          validation={ validatePasswordInput }
+          dataTestId="admin_manage__input-password"
+        />
 
         <label htmlFor="role">
           Tipo:
@@ -114,16 +96,23 @@ function Admin() {
           >
             <option value="seller">Vendedor</option>
             <option value="customer">Cliente</option>
+            <option value="administrator">Administrador</option>
           </select>
         </label>
 
         <button
-          type="button"
+          disabled={ !(email.isValid && password.isValid && name.isValid) }
+          type="submit"
+          onClick={ postEndPointRegister }
           data-testid="admin_manage__button-register"
-          disabled={ btnDisable }
         >
-          CADASTRAR
+          Cadastrar
         </button>
+        <span
+          data-testid="admin_manage__element-invalid-register"
+        >
+          {errorMessage}
+        </span>
       </form>
 
       <h1>Lista de usuários</h1>
