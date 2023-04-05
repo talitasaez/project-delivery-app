@@ -31,7 +31,7 @@ function Login() {
       case 'seller': history.push('/seller/orders'); break;
       default: history.push('/customer/products'); break;
       }
-    }).catch(({ response: { data: { message } } }) => setErrorMessage(message));
+    }).catch(({ response: { data } }) => setErrorMessage(data));
   };
 
   const redirectToResgister = () => {

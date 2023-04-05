@@ -32,7 +32,7 @@ function Register() {
       });
 
       history.push('/customer/products');
-    }).catch(({ response: { data: { message } } }) => setErrorMessage(message));
+    }).catch(({ response: { data } }) => setErrorMessage(data));
   };
 
   useEffect(() => {
